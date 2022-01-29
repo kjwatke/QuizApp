@@ -17,10 +17,16 @@ class ViewController: UIViewController {
 	var currentQuestionIndex = 0
 	var numCorrect = 0
 	
+	var resultDialog: ResultViewController?
+	
 	
 	override func viewDidLoad() {
 		
 		super.viewDidLoad()
+		
+		// Initialize the result dialog
+		resultDialog = storyboard?.instantiateViewController(withIdentifier: "ResultVC") as? ResultViewController
+		resultDialog?.modalPresentationStyle = .overCurrentContext
 		
 		// Set self as the dataSource and the delegate for tableView
 		tableView.delegate = self
@@ -117,6 +123,12 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
 			print("User got it wrong")
 		}
 		
+		// Show the popup
+		guard let resultDialog = resultDialog else {
+			return
+		}
+		
+		present(resultDialog, animated: true, completion: nil)
 		// Increment the currentQuestionIndex
 		currentQuestionIndex += 1
 		
