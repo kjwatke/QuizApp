@@ -19,21 +19,30 @@ class ResultViewController: UIViewController {
 	var feedbackText = ""
 	var buttonText = ""
 	
+	var delegate: ResultDelegate?
+	
 	
 	@IBAction func dismissTapped(_ sender: UIButton) {
+		dismiss(animated: true, completion: nil)
 		
-		
+		// Notify delegate the popup was dismissed
+		delegate?.dialogDismissed()
 	}
 	
-	
-    override func viewDidLoad() {
-
+	override func viewDidLoad() {
+		
 		super.viewDidLoad()
+		
+		
+		dialogView.layer.cornerRadius = 10
+		dialogView.clipsToBounds = true
+	}
+	override func viewWillAppear(_ animated: Bool) {
+		super.viewWillAppear(animated)
 		
 		// Now that the elements have loaded, set the text
 		titleLabel.text = titleText
 		feedbackLabel.text = feedbackText
 		dismissButton.setTitle(buttonText, for: .normal)
-
-    }
+	}
 }

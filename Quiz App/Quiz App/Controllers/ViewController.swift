@@ -33,6 +33,7 @@ class ViewController: UIViewController {
 		tableView.dataSource = self
 		
 		model.delegate = self
+		resultDialog?.delegate = self
 		
 		model.getQuestions()
 	}
@@ -44,11 +45,8 @@ class ViewController: UIViewController {
 			return
 		}
 		
-		// Display the question text
 		questionLabel.text = questions[currentQuestionIndex].question
-		
-		// Load the tableView
-		tableView.reloadData()
+
 	}
 }
 
@@ -62,6 +60,44 @@ extension ViewController: QuizDelegate {
 		
 		// Display the first question
 		displayQuestion()
+	}
+}
+
+// MARK: - Result Delegate method
+extension ViewController: ResultDelegate {
+	func dialogDismissed() {
+		// Increment the currentQuestionIndex
+		currentQuestionIndex += 1
+		
+		if currentQuestionIndex == questions.count {
+			
+			// The user has just answered the last question
+			// Show the popup
+			guard let resultDialog = resultDialog else {
+				return
+			}
+			
+				// Cusstomize the dialog text
+			resultDialog.titleText = "Summary"
+			resultDialog.feedbackText = "You got \(numCorrect) correct out of \(questions.count) questions"
+			resultDialog.buttonText = "Restart"
+			
+			present(resultDialog, animated: true, completion: nil)
+			
+		}
+		else if currentQuestionIndex > questions.count {
+			
+			// Restart
+			numCorrect = 0
+			currentQuestionIndex = 0
+			displayQuestion()
+		}
+		else if currentQuestionIndex < questions.count {
+			
+			// We have more questions to show
+			// Display the next question
+			displayQuestion()
+		}
 	}
 }
 
@@ -111,16 +147,21 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
 	
 	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 		
+		var titleText = ""
+		
 		// User has tapped on a row, check if it's the right answer
 		let question = questions[currentQuestionIndex]
 		
 		if question.correctAnswerIndex == indexPath.row {
 			// User got it right
 			print("User got it right")
+			titleText = "Correct"
+			numCorrect += 1
 		}
 		else {
 			// User got it wrong
 			print("User got it wrong")
+			titleText = "Wrong"
 		}
 		
 		// Show the popup
@@ -128,12 +169,12 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
 			return
 		}
 		
-		present(resultDialog, animated: true, completion: nil)
-		// Increment the currentQuestionIndex
-		currentQuestionIndex += 1
+		// Cusstomize the dialog text
+		resultDialog.titleText = titleText
+		resultDialog.feedbackText = question.feedback!
+		resultDialog.buttonText = "Next"
 		
-		// Display the next question
-		displayQuestion()
+		present(resultDialog, animated: true, completion: nil)
 	}
 	
 	

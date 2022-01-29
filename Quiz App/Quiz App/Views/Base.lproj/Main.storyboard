@@ -24,8 +24,8 @@
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8ky-iA-LUO">
                                         <rect key="frame" x="20" y="0.0" width="374" height="409"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <nil key="textColor"/>
+                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="23"/>
+                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" estimatedSectionHeaderHeight="-1" sectionFooterHeight="28" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="eYX-j3-WjB">
@@ -123,23 +123,23 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sgI-ES-o41" userLabel="FeedbackLabel">
-                                                <rect key="frame" x="96.5" y="172.5" width="41.5" height="173"/>
+                                                <rect key="frame" x="0.0" y="172.5" width="234" height="173"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5H8-0H-Alu">
-                                                <rect key="frame" x="83.5" y="345.5" width="67" height="172.5"/>
-                                                <state key="normal" title="Button"/>
-                                                <buttonConfiguration key="configuration" style="plain" title="Next"/>
+                                                <rect key="frame" x="101" y="345.5" width="32" height="172.5"/>
+                                                <color key="tintColor" red="0.34654563669999999" green="0.31316286329999998" blue="0.52943336959999998" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                                <state key="normal" title="Next"/>
                                                 <connections>
                                                     <action selector="dismissTapped:" destination="tQ5-3G-J69" eventType="touchUpInside" id="t8E-8x-4Pt"/>
                                                 </connections>
                                             </button>
                                         </subviews>
                                         <constraints>
-                                            <constraint firstItem="sgI-ES-o41" firstAttribute="width" secondItem="LWM-dI-8fe" secondAttribute="width" multiplier="0.17735" id="J1l-rw-Iyf"/>
-                                            <constraint firstItem="5H8-0H-Alu" firstAttribute="width" secondItem="LWM-dI-8fe" secondAttribute="width" multiplier="0.286325" id="wV1-S9-y21"/>
+                                            <constraint firstItem="sgI-ES-o41" firstAttribute="width" secondItem="LWM-dI-8fe" secondAttribute="width" id="J1l-rw-Iyf"/>
                                         </constraints>
                                     </stackView>
                                 </subviews>

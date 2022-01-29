@@ -18,6 +18,7 @@
 		34B8FBE127A46A3700493D2D /* QuizDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34B8FBE027A46A3700493D2D /* QuizDelegate.swift */; };
 		34B8FBE327A473EE00493D2D /* QuestionData.json in Resources */ = {isa = PBXBuildFile; fileRef = 34B8FBE227A473EE00493D2D /* QuestionData.json */; };
 		34B8FBE527A4C9F200493D2D /* ResultViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34B8FBE427A4C9F200493D2D /* ResultViewController.swift */; };
+		34B8FBE727A4D53000493D2D /* ResultDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34B8FBE627A4D53000493D2D /* ResultDelegate.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -34,6 +35,7 @@
 		34B8FBE027A46A3700493D2D /* QuizDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuizDelegate.swift; sourceTree = "<group>"; };
 		34B8FBE227A473EE00493D2D /* QuestionData.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = QuestionData.json; sourceTree = "<group>"; };
 		34B8FBE427A4C9F200493D2D /* ResultViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultViewController.swift; sourceTree = "<group>"; };
+		34B8FBE627A4D53000493D2D /* ResultDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultDelegate.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -118,6 +120,7 @@
 			isa = PBXGroup;
 			children = (
 				34B8FBE027A46A3700493D2D /* QuizDelegate.swift */,
+				34B8FBE627A4D53000493D2D /* ResultDelegate.swift */,
 			);
 			path = Protocols;
 			sourceTree = "<group>";
@@ -195,6 +198,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				34B8FBC827A467C500493D2D /* ViewController.swift in Sources */,
+				34B8FBE727A4D53000493D2D /* ResultDelegate.swift in Sources */,
 				34B8FBDC27A4689A00493D2D /* Question.swift in Sources */,
 				34B8FBE527A4C9F200493D2D /* ResultViewController.swift in Sources */,
 				34B8FBC427A467C500493D2D /* AppDelegate.swift in Sources */,
