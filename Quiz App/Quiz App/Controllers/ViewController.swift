@@ -58,6 +58,20 @@ extension ViewController: QuizDelegate {
 		// Get a reference to the questions
 		self.questions = questions
 		
+		// Check if we should restore the state, before showing question #!
+		let savedIndex = StateManager.retrieveValue(key: StateManager.questionIndexKey) as? Int
+		
+		guard let savedIndex = savedIndex, savedIndex < questions.count else { return }
+		currentQuestionIndex = savedIndex
+		
+		// Retrieve the number of correct questions
+		let savedNumCorrect  = StateManager.retrieveValue(key: StateManager.numCorrectKey) as? Int
+		
+		guard let savedNumCorrect = savedNumCorrect else { return }
+		
+		numCorrect = savedNumCorrect
+		
+		
 		// Display the first question
 		displayQuestion()
 	}
@@ -84,6 +98,9 @@ extension ViewController: ResultDelegate {
 			
 			present(resultDialog, animated: true, completion: nil)
 			
+			// Clear the state
+			StateManager.clearState()
+			
 		}
 		else if currentQuestionIndex > questions.count {
 			
@@ -97,6 +114,9 @@ extension ViewController: ResultDelegate {
 			// We have more questions to show
 			// Display the next question
 			displayQuestion()
+			
+			// Save the state
+			StateManager.saveState(numCorrect: numCorrect, questionIndex: currentQuestionIndex)
 		}
 	}
 }
