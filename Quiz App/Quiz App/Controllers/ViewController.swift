@@ -46,6 +46,8 @@ class ViewController: UIViewController {
 		}
 		
 		questionLabel.text = questions[currentQuestionIndex].question
+		
+		tableView.reloadData()
 
 	}
 }
@@ -61,16 +63,19 @@ extension ViewController: QuizDelegate {
 		// Check if we should restore the state, before showing question #!
 		let savedIndex = StateManager.retrieveValue(key: StateManager.questionIndexKey) as? Int
 		
-		guard let savedIndex = savedIndex, savedIndex < questions.count else { return }
-		currentQuestionIndex = savedIndex
+//		guard let savedIndex = savedIndex, savedIndex < questions.count else { return }
 		
-		// Retrieve the number of correct questions
-		let savedNumCorrect  = StateManager.retrieveValue(key: StateManager.numCorrectKey) as? Int
-		
-		guard let savedNumCorrect = savedNumCorrect else { return }
-		
-		numCorrect = savedNumCorrect
-		
+		if savedIndex != nil && savedIndex! < self.questions.count {
+			
+			currentQuestionIndex = savedIndex!
+			
+			// Retrieve the number of correct questions
+			let savedNumCorrect  = StateManager.retrieveValue(key: StateManager.numCorrectKey) as? Int
+			
+			if savedNumCorrect != nil {
+				numCorrect = savedNumCorrect!
+			}
+		}
 		
 		// Display the first question
 		displayQuestion()
@@ -132,7 +137,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
 		// Return the number of answers for this question
 		let currentQuestion = questions[currentQuestionIndex]
 		
-		if currentQuestion.answers!.count > 0 {
+		if currentQuestion.answers != nil {
 			return currentQuestion.answers!.count
 		}
 		else {
@@ -152,12 +157,11 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
 		    
 			let question = questions[currentQuestionIndex]
 			
-			if question.answers !=  nil && indexPath.row < question.answers!.count {
+			if question.answers !=  nil &&
+				indexPath.row < question.answers!.count {
 				// Set the answer text for the label
-				label?.text = question.answers![indexPath.row]
+				label!.text = question.answers![indexPath.row]
 			}
-			
-			
 		}
 
 		// Return the cell
@@ -172,7 +176,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
 		// User has tapped on a row, check if it's the right answer
 		let question = questions[currentQuestionIndex]
 		
-		if question.correctAnswerIndex == indexPath.row {
+		if question.correctAnswerIndex! == indexPath.row {
 			// User got it right
 			print("User got it right")
 			titleText = "Correct"
@@ -194,8 +198,8 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
 		resultDialog.feedbackText = question.feedback!
 		resultDialog.buttonText = "Next"
 		
-		present(resultDialog, animated: true, completion: nil)
+		DispatchQueue.main.async {
+			self.present(self.resultDialog!, animated: true, completion: nil)
+		}
 	}
-	
-	
 }
