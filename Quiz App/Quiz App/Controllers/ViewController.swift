@@ -1,16 +1,19 @@
-//
-//  ViewController.swift
-//  Quiz App
-//
-//  Created by Kevin  Watke on 1/28/22.
-//
+	//
+	//  ViewController.swift
+	//  Quiz App
+	//
+	//  Created by Kevin  Watke on 1/28/22.
+	//
 
 import UIKit
 
 class ViewController: UIViewController {
-
+	
 	@IBOutlet weak var questionLabel: UILabel!
 	@IBOutlet weak var tableView: UITableView!
+	@IBOutlet weak var rootStackView: UIStackView!
+	@IBOutlet weak var stackViewLeadingConstraint: NSLayoutConstraint!
+	@IBOutlet weak var stackViewTrailingConstraint: NSLayoutConstraint!
 	
 	var model = QuizModel()
 	var questions = [Question]()
@@ -24,11 +27,11 @@ class ViewController: UIViewController {
 		
 		super.viewDidLoad()
 		
-		// Initialize the result dialog
+			// Initialize the result dialog
 		resultDialog = storyboard?.instantiateViewController(withIdentifier: "ResultVC") as? ResultViewController
 		resultDialog?.modalPresentationStyle = .overCurrentContext
 		
-		// Set self as the dataSource and the delegate for tableView
+			// Set self as the dataSource and the delegate for tableView
 		tableView.delegate = self
 		tableView.dataSource = self
 		
@@ -38,9 +41,13 @@ class ViewController: UIViewController {
 		model.getQuestions()
 	}
 	
+	
+	
+	
+	
 	func displayQuestion() {
 		
-		// Check if there are questions and check that the currentQuestionIndex is not out of bounds
+			// Check if there are questions and check that the currentQuestionIndex is not out of bounds
 		guard questions.count > 0 && currentQuestionIndex < questions.count else {
 			return
 		}
@@ -48,28 +55,71 @@ class ViewController: UIViewController {
 		questionLabel.text = questions[currentQuestionIndex].question
 		
 		tableView.reloadData()
-
+		
+			// Slide in the next question
+		slideInQuestion()
+		
 	}
+	
+	
+	
+		// MARK: - Animations
+	
+	func slideInQuestion() {
+		
+			// Set the initial state
+		stackViewTrailingConstraint.constant = -1000
+		stackViewLeadingConstraint.constant = 1000
+		view.layoutIfNeeded()
+		
+			// Animate it to the end state
+		UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseOut) {
+			
+			self.stackViewLeadingConstraint.constant = 0
+			self.stackViewTrailingConstraint.constant = 0
+			self.view.layoutIfNeeded()
+			
+		}
+	}
+	
+	
+	func slideOutQuestion() {
+		
+			// Set the initial state
+		stackViewTrailingConstraint.constant = 0
+		stackViewLeadingConstraint.constant = 0
+		view.layoutIfNeeded()
+		
+			// Animate it to the end state
+		UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseOut) {
+			
+			self.stackViewLeadingConstraint.constant = -1000
+			self.stackViewTrailingConstraint.constant = 1000
+			self.view.layoutIfNeeded()
+			
+		}
+	}
+	
 }
 
-// MARK: - QuizModel Delegate methods
+	// MARK: - QuizModel Delegate methods
 
 extension ViewController: QuizDelegate {
 	func questionsRetrieved(_ questions: [Question]) {
 		
-		// Get a reference to the questions
+			// Get a reference to the questions
 		self.questions = questions
 		
-		// Check if we should restore the state, before showing question #!
+			// Check if we should restore the state, before showing question #!
 		let savedIndex = StateManager.retrieveValue(key: StateManager.questionIndexKey) as? Int
 		
-//		guard let savedIndex = savedIndex, savedIndex < questions.count else { return }
+			//		guard let savedIndex = savedIndex, savedIndex < questions.count else { return }
 		
 		if savedIndex != nil && savedIndex! < self.questions.count {
 			
 			currentQuestionIndex = savedIndex!
 			
-			// Retrieve the number of correct questions
+				// Retrieve the number of correct questions
 			let savedNumCorrect  = StateManager.retrieveValue(key: StateManager.numCorrectKey) as? Int
 			
 			if savedNumCorrect != nil {
@@ -77,21 +127,21 @@ extension ViewController: QuizDelegate {
 			}
 		}
 		
-		// Display the first question
+			// Display the first question
 		displayQuestion()
 	}
 }
 
-// MARK: - Result Delegate method
+	// MARK: - Result Delegate method
 extension ViewController: ResultDelegate {
 	func dialogDismissed() {
-		// Increment the currentQuestionIndex
+			// Increment the currentQuestionIndex
 		currentQuestionIndex += 1
 		
 		if currentQuestionIndex == questions.count {
 			
-			// The user has just answered the last question
-			// Show the popup
+				// The user has just answered the last question
+				// Show the popup
 			guard let resultDialog = resultDialog else {
 				return
 			}
@@ -103,38 +153,40 @@ extension ViewController: ResultDelegate {
 			
 			present(resultDialog, animated: true, completion: nil)
 			
-			// Clear the state
+				// Clear the state
 			StateManager.clearState()
 			
 		}
 		else if currentQuestionIndex > questions.count {
 			
-			// Restart
+				// Restart
 			numCorrect = 0
 			currentQuestionIndex = 0
+			
 			displayQuestion()
+			
 		}
 		else if currentQuestionIndex < questions.count {
 			
-			// We have more questions to show
-			// Display the next question
+				// We have more questions to show
+				// Display the next question
 			displayQuestion()
 			
-			// Save the state
+				// Save the state
 			StateManager.saveState(numCorrect: numCorrect, questionIndex: currentQuestionIndex)
 		}
 	}
 }
 
-// MARK: - UITableView Delegate & UITableViewDataSource methods
+	// MARK: - UITableView Delegate & UITableViewDataSource methods
 
 extension ViewController: UITableViewDelegate, UITableViewDataSource {
 	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 		
-		// Make sure the questions array contains at least a question
+			// Make sure the questions array contains at least a question
 		guard questions.count > 0 else { return 0 }
 		
-		// Return the number of answers for this question
+			// Return the number of answers for this question
 		let currentQuestion = questions[currentQuestionIndex]
 		
 		if currentQuestion.answers != nil {
@@ -147,24 +199,24 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
 	
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 		
-		// Get a cell
+			// Get a cell
 		let cell = tableView.dequeueReusableCell(withIdentifier: "AnswerCell", for: indexPath)
 		
-		// Customize the cell
+			// Customize the cell
 		let label = cell.viewWithTag(1) as? UILabel
 		
 		if label != nil {
-		    
+			
 			let question = questions[currentQuestionIndex]
 			
 			if question.answers !=  nil &&
 				indexPath.row < question.answers!.count {
-				// Set the answer text for the label
+					// Set the answer text for the label
 				label!.text = question.answers![indexPath.row]
 			}
 		}
-
-		// Return the cell
+		
+			// Return the cell
 		return cell
 	}
 	
@@ -173,27 +225,31 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
 		
 		var titleText = ""
 		
-		// User has tapped on a row, check if it's the right answer
+			// User has tapped on a row, check if it's the right answer
 		let question = questions[currentQuestionIndex]
 		
 		if question.correctAnswerIndex! == indexPath.row {
-			// User got it right
+				// User got it right
 			print("User got it right")
 			titleText = "Correct"
 			numCorrect += 1
 		}
 		else {
-			// User got it wrong
+				// User got it wrong
 			print("User got it wrong")
 			titleText = "Wrong"
 		}
 		
-		// Show the popup
+		DispatchQueue.main.async {
+			self.slideOutQuestion()
+		}
+		
+			// Show the popup
 		guard let resultDialog = resultDialog else {
 			return
 		}
 		
-		// Cusstomize the dialog text
+			// Cusstomize the dialog text
 		resultDialog.titleText = titleText
 		resultDialog.feedbackText = question.feedback!
 		resultDialog.buttonText = "Next"
